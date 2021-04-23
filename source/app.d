@@ -50,7 +50,7 @@ int main()
 			|| throwError!`different kit versions: sdk is %s, while libs are %s`(kitsVer,
 					kitsLibVer);
 
-		const kitsLibs = environment[`WindowsSdkDir`] ~ kitsLibVer; //`C:\Program Files (x86)\Windows Kits\10\Lib`.getDir;
+		const kitsLibs = environment[`WindowsSdkDir`] ~ `Lib\` ~ kitsLibVer; //`C:\Program Files (x86)\Windows Kits\10\Lib`.getDir;
 		const kitsIncludes = kitsLibs.replace(`\Lib\`, `\Include\`); //`C:\Program Files (x86)\Windows Kits\10\Include`.getDir;
 		const msvc = environment[`VCToolsInstallDir`]; //`C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC`.getDir;
 
@@ -63,28 +63,28 @@ int main()
 		foreach (file; only(`rc.exe`, `rcdll.dll`, `mt.exe`, `mt.exe.config`, `midlrtmd.dll`))
 			files[`bin/` ~ file] = kitsBin ~ `/x86/` ~ file;
 
-		foreach (file, path; enumFiles(kitsIncludes ~ `/shared`))
+		foreach (file, path; enumFiles(kitsIncludes ~ `shared`))
 			files[`include/` ~ file] = path;
-		foreach (file, path; enumFiles(kitsIncludes ~ `/um`))
+		foreach (file, path; enumFiles(kitsIncludes ~ `um`))
 			files[`include/` ~ file] = path;
-		foreach (file, path; enumFiles(kitsIncludes ~ `/ucrt`))
+		foreach (file, path; enumFiles(kitsIncludes ~ `ucrt`))
 			files[`include/` ~ file] = path;
 
-		foreach (file, path; enumFiles(kitsLibs ~ `/um/x86`))
+		foreach (file, path; enumFiles(kitsLibs ~ `um/x86`))
 			files[`lib/x86/` ~ file] = path;
-		foreach (file, path; enumFiles(kitsLibs ~ `/um/x64`))
+		foreach (file, path; enumFiles(kitsLibs ~ `um/x64`))
 			files[`lib/x64/` ~ file] = path;
 
-		foreach (file, path; enumFiles(kitsLibs ~ `/ucrt/x86`))
+		foreach (file, path; enumFiles(kitsLibs ~ `ucrt/x86`))
 			files[`lib/x86/` ~ file] = path;
-		foreach (file, path; enumFiles(kitsLibs ~ `/ucrt/x64`))
+		foreach (file, path; enumFiles(kitsLibs ~ `ucrt/x64`))
 			files[`lib/x64/` ~ file] = path;
 
-		foreach (file, path; enumFiles(msvc ~ `/include`))
+		foreach (file, path; enumFiles(msvc ~ `include`))
 			files[`include/` ~ file] = path;
-		foreach (file, path; enumFiles(msvc ~ `/lib/x86`))
+		foreach (file, path; enumFiles(msvc ~ `lib/x86`))
 			files[`lib/x86/` ~ file] = path;
-		foreach (file, path; enumFiles(msvc ~ `/lib/x64`))
+		foreach (file, path; enumFiles(msvc ~ `lib/x64`))
 			files[`lib/x64/` ~ file] = path;
 
 		scope zip = new Zip(`msvc_` ~ msvc.baseName ~ `.zip`, true, true);
