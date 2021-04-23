@@ -6,7 +6,7 @@ auto getDir(string path)
 		.map!(a => a.name)
 		.array;
 
-	dirs.length == 1 || throwError(`too many versions for %s`, path);
+	dirs.length == 1 || throwError!"too many versions for %s:\n%(%s\n%)"(path, dirs);
 	auto res = dirs[0];
 
 	logger(`using %s`, res);
