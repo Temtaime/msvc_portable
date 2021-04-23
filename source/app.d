@@ -4,7 +4,7 @@ auto getDir(string path)
 {
 	auto dirs = path.dirEntries(SpanMode.shallow).filter!(a => a.isDir)
 		.map!(a => a.name)
-		.filter!(a => a.baseName.startsWith(`10.0.`))
+		.filter!(a => a.baseName.startsWith(`10.`))
 		.array
 		.sort
 		.release;
@@ -28,7 +28,7 @@ auto enumFiles(string path)
 		.assocArray;
 }
 
-void main()
+int main()
 {
 	try
 	{
@@ -88,10 +88,13 @@ void main()
 
 		foreach (file, path; files)
 			zip.put(file, path.read);
+
+		return 0;
 	}
 	catch (Exception e)
 	{
 		logger.error(e);
-		readln;
 	}
+
+	return 1;
 }
