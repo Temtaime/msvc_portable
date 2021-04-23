@@ -43,15 +43,19 @@ int main()
 		// 	`-p`, `--norestart`, `--wait`
 		// ].execute.status == 0 || throwError(`error while installing build tools`);
 
-		const kitsLibs = environment[`WindowsSdkDir`] ~ environment[`WindowsSDKLibVersion`]; //`C:\Program Files (x86)\Windows Kits\10\Lib`.getDir;
+		const kitsVer = environment[`WindowsSDKVersion`];
+		const kitsLibVer = environment[`WindowsSDKLibVersion`];
+
+		kitsVer == kitsLibVer
+			|| throwError!`different kit versions: sdk is %s, while libs are %s`(kitsVer,
+					kitsLibVer);
+
+		const kitsLibs = environment[`WindowsSdkDir`] ~ kitsLibVer; //`C:\Program Files (x86)\Windows Kits\10\Lib`.getDir;
 		const kitsIncludes = kitsLibs.replace(`\Lib\`, `\Include\`); //`C:\Program Files (x86)\Windows Kits\10\Include`.getDir;
 		const msvc = environment[`VCToolsInstallDir`]; //`C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC`.getDir;
 
-		const kitsVer = kitsLibs.baseName;
-		kitsVer == kitsIncludes.baseName || throwError(`different kits versions`);
-
-		const kitsBin = `C:\Program Files (x86)\Windows Kits\10\bin\` ~ kitsVer;
 		string[string] files;
+		const kitsBin = environment[`WindowsSdkBinPath`];
 
 		// foreach (arch; only(`x86`, `x64`))
 		// 	foreach (file; only(`rc.exe`, `rcdll.dll`, `mt.exe`, `midlrtmd.dll`, `mt.exe.config`))
