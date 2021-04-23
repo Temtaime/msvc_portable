@@ -12,7 +12,7 @@ auto getDir(string path)
 	dirs.length || throwError!`no versions found for %s`(path);
 
 	if (dirs.length != 1)
-		logger("too many versions for %s:\n%-(%s\n%)", dirs);
+		logger("too many versions for %s:\n%-(%s\n%)", path, dirs);
 
 	auto res = dirs[$ - 1];
 
