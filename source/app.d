@@ -4,10 +4,17 @@ auto getDir(string path)
 {
 	auto dirs = path.dirEntries(SpanMode.shallow).filter!(a => a.isDir)
 		.map!(a => a.name)
-		.array;
+		.filter!(a => a.baseName.startsWith(`10.0.`))
+		.array
+		.sort
+		.release;
 
-	dirs.length == 1 || throwError!"too many versions for %s:\n%(%s\n%)"(path, dirs);
-	auto res = dirs[0];
+	dirs.length || throwError!`no versions found for %s`(path);
+
+	if (dirs.length != 1)
+		logger("too many versions for %s:\n%-(%s\n%)", dirs);
+
+	auto res = dirs[$ - 1];
 
 	logger(`using %s`, res);
 	return res;
