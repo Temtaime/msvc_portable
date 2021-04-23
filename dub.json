@@ -1,0 +1,6 @@
+﻿{
+	"name": "msvc-copier",
+	"dependencies": {
+		"utile": ">=1.2.6"
+	}
+}

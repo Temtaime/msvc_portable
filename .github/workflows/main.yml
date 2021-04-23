@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # - uses: ilammy/msvc-dev-cmd@v1
+      #   with:
+      #     arch: x64
+
+      - uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ${{ matrix.dub_compiler }}
+
+      - run: dub run
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path:
+            msvc_*.zip
